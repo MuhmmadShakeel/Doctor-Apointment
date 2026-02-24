@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['student', 'teacher', 'admin'],
-        default: 'student'
+        enum: ['patient', 'doctor', 'admin'],
+        default: 'patient'
     },
      profilePicture :{
        public_id: {
@@ -26,12 +26,6 @@ const userSchema = new mongoose.Schema({
             type: String,
          }
     },
-    standard: {
-        type: String,
-        enum: ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'],
-        default: null
-    }
-  
 }, { timestamps: true });
 const User = mongoose.model('user', userSchema);
 export default User;

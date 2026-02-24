@@ -1,9 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import router from './routes/UserRoute.js';
 import cloudinary from 'cloudinary';
+import router from './routes/UserRoute.js';
 import complainRouter from './routes/ComplaintRoute.js';
+import doctorrouter from './routes/DoctorRoute.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ cloudinary.v2.config({
 
 app.use('/api/user', router);
 app.use('/api/complaint', complainRouter);
+app.use('/api/doctor', doctorrouter);
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });

@@ -1,7 +1,6 @@
 import User from "../model/UserModel.js";
 import bcrypt from "bcrypt";
 import { z } from "zod";
-import upload from "../middleware/Multer.js";
 import cloudinary from 'cloudinary';
 import jwt from "jsonwebtoken";
 
