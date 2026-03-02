@@ -1,255 +1,167 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown, Heart, Stethoscope, Truck, Shield } from "lucide-react";
+import { Menu, X, ShoppingCart, ChevronDown, User } from "lucide-react";
+import BillingCart from "./BillingCart";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [dashboardOpen, setDashboardOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Get cart items from Redux
+  const { items } = useSelector((state) => state.billing);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.dropdown')) {
+        setDropdownOpen(false);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-white shadow-md'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <>
+      <nav
+        className={`sticky top-0 w-full z-50 transition-all duration-300 ${
+          scrolled ? "bg-white/95 backdrop-blur-md shadow-lg" : "bg-white shadow-md"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-        {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 bg-linear-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-            <Heart className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-2xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            MediLink
-          </span>
-        </Link>
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold text-[#2563EB]">MediLink</Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center space-x-8 text-gray-700 font-medium">
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center space-x-6">
+            <Link to="/" className="hover:text-blue-600">Home</Link>
+            <Link to="/doctors" className="hover:text-blue-600">Doctors</Link>
+            <Link to="/medication" className="hover:text-blue-600">Medication</Link>
+            <Link to="/bookride" className="hover:text-blue-600">Book Ride</Link>
+            <Link to="/login" className="hover:text-blue-600">Login</Link>
+            <Link to="/signup" className="hover:text-blue-600">Signup</Link>
+            <Link to="/profile" className="hover:text-blue-600">Profile</Link>
+            <Link to="/account" className="hover:text-blue-600">Manage Account</Link>
 
-          <Link to="/" className="relative group hover:text-blue-600 transition-colors duration-200">
-            <span>Home</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
-          </Link>
-
-          <Link to="/about" className="relative group hover:text-blue-600 transition-colors duration-200">
-            <span>About</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
-          </Link>
-
-          <Link to="/doctors" className="relative group hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1">
-            <Stethoscope className="w-4 h-4" />
-            <span>Doctors</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
-          </Link>
-
-          <Link to="/medication" className="relative group hover:text-blue-600 transition-colors duration-200">
-            <span>Medication</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
-          </Link>
-
-          <Link to="/bookride" className="relative group hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1">
-            <Truck className="w-4 h-4" />
-            <span>Book Ride</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
-          </Link>
-
-          <Link to="/contact" className="relative group hover:text-blue-600 transition-colors duration-200">
-            <span>Contact</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-200"></span>
-          </Link>
-
-          {/* Dashboard Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setDashboardOpen(!dashboardOpen)}
-              className="flex items-center gap-1 hover:text-blue-600 transition-colors duration-200"
-            >
-              <Shield className="w-4 h-4" />
-              <span>Dashboards</span>
-              <ChevronDown size={16} className={`transition-transform duration-200 ${dashboardOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {dashboardOpen && (
-              <div className="absolute top-12 left-0 bg-white/95 backdrop-blur-md shadow-xl rounded-xl w-56 py-3 border border-gray-100 animate-in slide-in-from-top-2 duration-200">
-                <Link
-                  to="/doctor/dashboard"
-                  className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors duration-200"
-                >
-                  <Stethoscope className="w-5 h-5 text-green-600" />
-                  <span className="font-medium">Doctor Dashboard</span>
-                </Link>
-                <Link
-                  to="/rider/dashboard"
-                  className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors duration-200"
-                >
-                  <Truck className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium">Rider Dashboard</span>
-                </Link>
-                <Link
-                  to="/admin/dashboard"
-                  className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors duration-200"
-                >
-                  <Shield className="w-5 h-5 text-purple-600" />
-                  <span className="font-medium">Admin Dashboard</span>
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Profile Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
-            >
-              <img
-                src="https://i.ibb.co/2n1kYxF/rider.png"
-                alt="Profile"
-                className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
-              />
-              <ChevronDown size={16} className={`transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {profileOpen && (
-              <div className="absolute top-12 right-0 bg-white/95 backdrop-blur-md shadow-xl rounded-xl w-48 py-3 border border-gray-100 animate-in slide-in-from-top-2 duration-200">
-                <Link
-                  to="/account"
-                  className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <span className="font-medium">My Account</span>
-                </Link>
-                <Link
-                  to="/settings"
-                  className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <span className="font-medium">Settings</span>
-                </Link>
-                <hr className="my-2 border-gray-200" />
-                <button className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200 font-medium">
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 animate-in slide-in-from-top-2 duration-300">
-          <div className="px-6 py-4 space-y-4">
-            <Link
-              to="/"
-              className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              About
-            </Link>
-            <Link
-              to="/doctors"
-              className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              Doctors
-            </Link>
-            <Link
-              to="/medication"
-              className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              Medication
-            </Link>
-            <Link
-              to="/bookride"
-              className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              Book Ride
-            </Link>
-            <Link
-              to="/contact"
-              className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              Contact
-            </Link>
-
-            <div className="border-t border-gray-200 pt-4">
-              <p className="text-sm font-semibold text-gray-900 mb-3">Dashboards</p>
-              <Link
-                to="/doctor/dashboard"
-                className="block py-2 text-gray-700 hover:text-green-600 transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
+            {/* Dashboard Dropdown */}
+            <div className="relative dropdown">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center space-x-1 hover:text-blue-600 transition"
               >
-                Doctor Dashboard
-              </Link>
-              <Link
-                to="/rider/dashboard"
-                className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                Rider Dashboard
-              </Link>
-              <Link
-                to="/admin/dashboard"
-                className="block py-2 text-gray-700 hover:text-purple-600 transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                Admin Dashboard
-              </Link>
-            </div>
-
-            <div className="border-t border-gray-200 pt-4">
-              <Link
-                to="/account"
-                className="block py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                My Account
-              </Link>
-              <button className="block py-2 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium">
-                Logout
+                <User size={20} />
+                <span>Dashboard</span>
+                <ChevronDown size={16} />
               </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20">
+                  <Link
+                    to="/doctor/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Doctor Dashboard
+                  </Link>
+                  <Link
+                    to="/rider/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Rider Dashboard
+                  </Link>
+                  <Link
+                    to="/admin/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Admin Dashboard
+                  </Link>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
+
+            {/* Cart Button */}
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative p-2 hover:text-blue-600 transition"
+            >
+              <ShoppingCart size={24} />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
+                  {items.length}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Mobile menu button */}
+          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="lg:hidden bg-white shadow-md">
+          <div className="px-6 py-4 space-y-4">
+            <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
+            <Link to="/doctors" onClick={() => setIsOpen(false)}>Doctors</Link>
+            <Link to="/medication" onClick={() => setIsOpen(false)}>Medication</Link>
+            <Link to="/bookride" onClick={() => setIsOpen(false)}>Book Ride</Link>
+            <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
+            <Link to="/signup" onClick={() => setIsOpen(false)}>Signup</Link>
+            <Link to="/profile" onClick={() => setIsOpen(false)}>Profile</Link>
+            <Link to="/account" onClick={() => setIsOpen(false)}>Manage Account</Link>
+            <div className="border-t pt-4">
+              <p className="text-sm font-semibold text-gray-600 mb-2">Dashboard</p>
+              <Link to="/doctor/dashboard" onClick={() => setIsOpen(false)} className="block py-1">Doctor Dashboard</Link>
+              <Link to="/rider/dashboard" onClick={() => setIsOpen(false)} className="block py-1">Rider Dashboard</Link>
+              <Link to="/admin/dashboard" onClick={() => setIsOpen(false)} className="block py-1">Admin Dashboard</Link>
+              <button onClick={() => setIsOpen(false)} className="block py-1 w-full text-left">Logout</button>
+            </div>
+            {/* Cart Button for Mobile */}
+            <button
+              onClick={() => { setCartOpen(true); setIsOpen(false); }}
+              className="relative p-2 hover:text-blue-600 transition flex items-center w-full justify-start"
+            >
+              <ShoppingCart size={24} className="mr-2" />
+              Cart
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
+                  {items.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       )}
 
-      {/* Click outside to close dropdowns */}
-      {(dashboardOpen || profileOpen) && (
-        <div
-          className="fixed inset-0 z-[-1]"
-          onClick={() => {
-            setDashboardOpen(false);
-            setProfileOpen(false);
-          }}
-        />
-      )}
-    </nav>
+      {/* BillingCart Sidebar */}
+      <div className={`fixed top-0 right-0 h-full w-full lg:w-1/3 bg-white shadow-2xl z-50 transition-transform duration-300 ${cartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="flex justify-end p-4">
+          <button onClick={() => setCartOpen(false)} className="text-gray-600 hover:text-red-500">
+            <X size={28} />
+          </button>
+        </div>
+        <BillingCart />
+      </div>
+    </>
   );
 }
 

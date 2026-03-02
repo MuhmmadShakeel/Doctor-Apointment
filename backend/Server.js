@@ -4,7 +4,11 @@ import dotenv from 'dotenv';
 import cloudinary from 'cloudinary';
 import router from './routes/UserRoute.js';
 import complainRouter from './routes/ComplaintRoute.js';
+import appointmentRouter from './routes/AppointmenRoute.js';
 import doctorrouter from './routes/DoctorRoute.js';
+import riderRouter from './routes/RideRoute.js';
+import medicineRouter from './routes/MedicineRoute.js';
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +30,9 @@ cloudinary.v2.config({
 app.use('/api/user', router);
 app.use('/api/complaint', complainRouter);
 app.use('/api/doctor', doctorrouter);
+app.use('/api/rider',riderRouter)
+app.use('/api/medicine',medicineRouter)
+app.use('/api/appointment',appointmentRouter)
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });

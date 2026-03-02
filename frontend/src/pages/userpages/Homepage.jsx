@@ -9,7 +9,7 @@ function Homepage() {
   }, [])
 
   return (
-    <div>
+    <div className='overflow-hidden'>
       <PatientHomeHeader/>
       {/* Features Section */}
       <section className="py-16 bg-white" data-aos="fade-up">

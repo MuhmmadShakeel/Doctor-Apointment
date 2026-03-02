@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import toast from "react-hot-toast";
 // User Layout Components
 import Navbar from "./components/patientcomponents/common/Navbar";
 import Footer from "./components/patientcomponents/common/Footer";
@@ -37,6 +37,7 @@ import Bookridepage from "./pages/userpages/Bookridepage";
 import UserAccount from "./components/patientcomponents/useraccount/UserAccount";
 import Loginpage from "./pages/userpages/Loginpage";
 import Signuppage from "./pages/userpages/Signuppage";
+import Profilepage from "./pages/userpages/Profilepage";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Contact from "./pages/Contact";
@@ -50,11 +51,11 @@ function App() {
     <Router>
       <Routes>
 
-        {/* ================= USER ROUTES ================= */}
         <Route
           path="/"
           element={
             <>
+              <toast position="top-right" />
               <Navbar />
               <Homepage />
               <Footer />
@@ -117,6 +118,16 @@ function App() {
             <>
               <Navbar />
               <Signuppage />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <>
+              <Navbar />
+              <Profilepage />
               <Footer />
             </>
           }
