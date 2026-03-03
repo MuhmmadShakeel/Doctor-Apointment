@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 // User Layout Components
 import Navbar from "./components/patientcomponents/common/Navbar";
 import Footer from "./components/patientcomponents/common/Footer";
+import { ToastContainer } from "react-toastify"; // ✅ import ToastContainer
 
 // Doctor Components
 import DocNav from "./components/doctorcomponents/doctorhome/DocNav";
@@ -48,6 +49,18 @@ import Contact from "./pages/Contact";
 
 function App() {
   return (
+    <>
+     <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
+    
     <Router>
       <Routes>
 
@@ -308,6 +321,7 @@ function App() {
 
       </Routes>
     </Router>
+    </>
   );
 }
 

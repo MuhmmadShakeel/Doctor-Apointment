@@ -49,7 +49,6 @@ export const getAllAppointments = async (req, res) => {
   }
 };
 
-
 export const getSingleAppointment = async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
@@ -138,7 +137,6 @@ export const deleteAppointment = async (req, res) => {
 
 
 
-// 🔹 Book Appointment
 export const bookAppointment = async (req, res) => {
   try {
     const userId = req.userId; // from auth middleware
@@ -188,13 +186,12 @@ export const bookAppointment = async (req, res) => {
 
 
 
-// 🔹 Get Logged-in User Appointments (with populate)
 export const getUserAppointments = async (req, res) => {
   try {
     const userId = req.userId;
 
     const bookings = await Booked.find({ userId })
-      .populate("appointmentId"); // 🔥 join like system
+      .populate("appointmentId"); 
 
     res.status(200).json({
       success: true,

@@ -8,9 +8,16 @@ import appointmentRouter from './routes/AppointmenRoute.js';
 import doctorrouter from './routes/DoctorRoute.js';
 import riderRouter from './routes/RideRoute.js';
 import medicineRouter from './routes/MedicineRoute.js';
+import cors from "cors";
 
 dotenv.config();
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 const PORT = process.env.PORT || 5000;
 app.use(express.json());
 const MONGO_URI = process.env.MONGO_URI;
