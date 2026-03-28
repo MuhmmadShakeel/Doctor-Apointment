@@ -1,5 +1,5 @@
 import React from 'react'
-import Signup from '../../components/patientcomponents/auth/Signup'
+import Signup from '../components/patientcomponents/auth/Signup'
 
 function Signuppage() {
   return (

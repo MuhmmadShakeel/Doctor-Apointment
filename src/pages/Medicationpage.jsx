@@ -1,5 +1,5 @@
 import React from 'react'
-import Medication from '../../components/patientcomponents/medication/Medication'
+import Medication from '../components/patientcomponents/medication/Medication'
 
 function Medicationpage() {
   return (
