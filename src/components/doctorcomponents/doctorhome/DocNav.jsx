@@ -113,7 +113,7 @@ function DocNav() {
 
           <Link
             to="/doctor/patients"
-            className="block text-gray-700 hover:text-[#2563EB]"
+            className="block text-black hover:text-[#2563EB]"
           >
             Patients
           </Link>
